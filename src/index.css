@@ -53,6 +53,15 @@ All colors MUST be HSL.
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Bookmark card states */
+    --card-normal: 0 0% 95.7%;
+    --card-normal-border: 0 0% 91.8%;
+    --card-disabled: 0 0% 91.8%;
+    --card-disabled-border: 0 0% 81.6%;
+    --card-selected: 0 0% 100%;
+    --card-selected-border: 178 100% 33.5% / 0.7;
+    --card-selected-bg-overlay: 177 95.8% 21.8% / 0.05;
   }
 
   .dark {
@@ -91,6 +100,15 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Bookmark card states - dark mode */
+    --card-normal: 217.2 32.6% 17.5%;
+    --card-normal-border: 217.2 32.6% 17.5%;
+    --card-disabled: 240 3.7% 15.9%;
+    --card-disabled-border: 240 3.7% 15.9%;
+    --card-selected: 222.2 84% 4.9%;
+    --card-selected-border: 178 100% 33.5% / 0.7;
+    --card-selected-bg-overlay: 177 95.8% 21.8% / 0.05;
   }
 }
 

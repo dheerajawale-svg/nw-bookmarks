@@ -57,6 +57,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        "card-state": {
+          normal: "hsl(var(--card-normal))",
+          "normal-border": "hsl(var(--card-normal-border))",
+          disabled: "hsl(var(--card-disabled))",
+          "disabled-border": "hsl(var(--card-disabled-border))",
+          selected: "hsl(var(--card-selected))",
+          "selected-border": "hsl(var(--card-selected-border))",
+          "selected-overlay": "hsl(var(--card-selected-bg-overlay))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

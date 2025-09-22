@@ -16,10 +16,12 @@ interface BookmarkCardProps {
   filters: Filter[];
   userInitials: string;
   isEditable?: boolean;
+  state?: 'normal' | 'disabled' | 'selected';
   className?: string;
   onContentChange?: (content: string) => void;
   onMenuClick?: () => void;
   onNoteClick?: () => void;
+  onClick?: () => void;
 }
 
 export const BookmarkCard: React.FC<BookmarkCardProps> = ({
@@ -30,10 +32,12 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   filters,
   userInitials,
   isEditable = false,
+  state = 'normal',
   className = '',
   onContentChange,
   onMenuClick,
-  onNoteClick
+  onNoteClick,
+  onClick
 }) => {
   const [cardContent, setCardContent] = useState(content);
 
@@ -42,27 +46,50 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
     onContentChange?.(newContent);
   };
 
+  const getCardStyles = () => {
+    const baseStyles = "flex w-[556px] min-w-[336px] max-h-[700px] flex-col items-start border h-32 rounded-lg border-solid max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] max-sm:p-2";
+    
+    switch (state) {
+      case 'disabled':
+        return `${baseStyles} bg-card-state-disabled border-card-state-disabled-border cursor-not-allowed`;
+      case 'selected':
+        return `${baseStyles} bg-card-state-selected border-card-state-selected-border relative overflow-hidden before:absolute before:inset-0 before:bg-card-state-selected-overlay before:pointer-events-none cursor-pointer`;
+      default:
+        return `${baseStyles} bg-card-state-normal border-card-state-normal-border ${onClick ? 'cursor-pointer hover:shadow-sm transition-shadow' : ''}`;
+    }
+  };
+
+  const isInteractive = state !== 'disabled';
+
+  const handleCardClick = () => {
+    if (isInteractive && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <article
-      className={`flex w-[556px] min-w-[336px] max-h-[700px] flex-col items-start border h-32 bg-[#F4F5F5] rounded-lg border-solid border-[#EAEBEB] max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] max-sm:p-2 ${className}`}
+      className={`${getCardStyles()} ${className}`}
       role="article"
       aria-label={`Bookmark: ${title}`}
+      onClick={handleCardClick}
+      aria-disabled={!isInteractive}
     >
       <BookmarkHeader
         title={title}
         reference={reference}
         timeRange={timeRange}
-        onMenuClick={onMenuClick}
+        onMenuClick={isInteractive ? onMenuClick : undefined}
       />
       <BookmarkContent
         content={cardContent}
-        isEditable={isEditable}
+        isEditable={isEditable && isInteractive}
         onContentChange={handleContentChange}
       />
       <BookmarkFooter
         filters={filters}
         userInitials={userInitials}
-        onNoteClick={onNoteClick}
+        onNoteClick={isInteractive ? onNoteClick : undefined}
       />
     </article>
   );
