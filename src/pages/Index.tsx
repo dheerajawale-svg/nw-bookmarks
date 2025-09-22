@@ -89,55 +89,65 @@ const Index = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography 
-          variant="h1" 
-          sx={{ 
-            fontSize: '2rem',
-            fontWeight: 600,
-            mb: 1,
-            color: 'text.primary',
-          }}
-        >
-          Bookmarks
-        </Typography>
-      </Box>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        backgroundColor: 'background.default',
+        py: 4,
+      }}
+    >
+      <Container maxWidth="lg">
+        <Box sx={{ mb: 4 }}>
+          <Typography 
+            variant="h1" 
+            sx={{ 
+              fontSize: '32px',
+              fontWeight: 600,
+              mb: 1,
+              color: 'text.primary',
+              fontFamily: 'inherit',
+            }}
+          >
+            Bookmarks
+          </Typography>
+        </Box>
 
-      <Box sx={{ mb: 3 }}>
-        <Typography 
-          variant="h2" 
-          sx={{ 
-            fontSize: '1.5rem',
-            fontWeight: 600,
-            color: 'text.primary',
-          }}
-        >
-          Recent Bookmarks
-        </Typography>
-      </Box>
+        <Box sx={{ mb: 3 }}>
+          <Typography 
+            variant="h2" 
+            sx={{ 
+              fontSize: '24px',
+              fontWeight: 600,
+              color: 'text.primary',
+              fontFamily: 'inherit',
+            }}
+          >
+            Recent Bookmarks
+          </Typography>
+        </Box>
 
-      <Grid container spacing={3}>
-        {bookmarks.map((bookmark) => (
-          <Grid key={bookmark.id} size={{ xs: 12, md: 6, xl: 4 }}>
-            <BookmarkCard
-              title={bookmark.title}
-              reference={bookmark.reference}
-              timeRange={bookmark.timeRange}
-              content={bookmark.content}
-              filters={bookmark.filters}
-              userInitials={bookmark.userInitials}
-              isEditable={true}
-              state={getBookmarkState(bookmark)}
-              onContentChange={(content) => handleContentChange(bookmark.id, content)}
-              onMenuClick={() => handleMenuClick(bookmark.id)}
-              onNoteClick={() => handleNoteClick(bookmark.id)}
-              onClick={() => handleCardClick(bookmark.id, bookmark.isDisabled)}
-            />
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+        <Grid container spacing={3}>
+          {bookmarks.map((bookmark) => (
+            <Grid key={bookmark.id} size={{ xs: 12, md: 6, xl: 4 }}>
+              <BookmarkCard
+                title={bookmark.title}
+                reference={bookmark.reference}
+                timeRange={bookmark.timeRange}
+                content={bookmark.content}
+                filters={bookmark.filters}
+                userInitials={bookmark.userInitials}
+                isEditable={true}
+                state={getBookmarkState(bookmark)}
+                onContentChange={(content) => handleContentChange(bookmark.id, content)}
+                onMenuClick={() => handleMenuClick(bookmark.id)}
+                onNoteClick={() => handleNoteClick(bookmark.id)}
+                onClick={() => handleCardClick(bookmark.id, bookmark.isDisabled)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 

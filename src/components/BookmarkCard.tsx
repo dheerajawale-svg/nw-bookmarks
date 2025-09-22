@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Box } from '@mui/material';
+import { Card, Box, Divider } from '@mui/material';
 import { BookmarkHeader } from './BookmarkHeader';
 import { BookmarkContent } from './BookmarkContent';
 import { BookmarkFooter } from './BookmarkFooter';
@@ -65,6 +65,8 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
         minHeight: 128,
         cursor: onClick && isInteractive ? 'pointer' : 'default',
         transition: 'all 0.2s ease-in-out',
+        borderRadius: '8px',
+        overflow: 'hidden',
         '&:hover': onClick && isInteractive ? {
           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
         } : {},
@@ -81,26 +83,28 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
       aria-label={`Bookmark: ${title}`}
       aria-disabled={!isInteractive}
     >
-      <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-          <BookmarkHeader
-            title={title}
-            reference={reference}
-            timeRange={timeRange}
-            onMenuClick={isInteractive ? onMenuClick : undefined}
-          />
-          <BookmarkContent
-            content={cardContent}
-            isEditable={isEditable && isInteractive}
-            onContentChange={handleContentChange}
-          />
-          <BookmarkFooter
-            filters={filters}
-            userInitials={userInitials}
-            onNoteClick={isInteractive ? onNoteClick : undefined}
-          />
-        </Box>
-      </CardContent>
+      <BookmarkHeader
+        title={title}
+        reference={reference}
+        timeRange={timeRange}
+        onMenuClick={isInteractive ? onMenuClick : undefined}
+      />
+      
+      <Divider sx={{ mx: 2 }} />
+      
+      <BookmarkContent
+        content={cardContent}
+        isEditable={isEditable && isInteractive}
+        onContentChange={handleContentChange}
+      />
+      
+      <Divider sx={{ mx: 2 }} />
+      
+      <BookmarkFooter
+        filters={filters}
+        userInitials={userInitials}
+        onNoteClick={isInteractive ? onNoteClick : undefined}
+      />
     </Card>
   );
 };

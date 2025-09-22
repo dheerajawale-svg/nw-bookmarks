@@ -35,10 +35,10 @@ export const BookmarkFooter: React.FC<BookmarkFooterProps> = ({
         justifyContent: 'space-between',
         alignItems: 'center',
         px: 2,
-        pb: 2,
+        py: 1.5,
       }}
     >
-      <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', gap: 0.75, alignItems: 'center' }}>
         {filters.map((filter, index) => (
           <Chip
             key={index}
@@ -48,13 +48,20 @@ export const BookmarkFooter: React.FC<BookmarkFooterProps> = ({
             variant="outlined"
             sx={{
               height: 24,
-              fontSize: '0.75rem',
+              fontSize: '12px',
+              fontFamily: 'inherit',
+              backgroundColor: 'background.paper',
+              border: '1px solid',
+              borderColor: 'divider',
               '& .MuiChip-icon': {
                 fontSize: 12,
                 ml: 0.5,
+                color: 'text.secondary',
               },
               '& .MuiChip-label': {
                 px: 0.5,
+                color: 'text.secondary',
+                fontWeight: 400,
               },
             }}
           />
@@ -66,6 +73,7 @@ export const BookmarkFooter: React.FC<BookmarkFooterProps> = ({
             onClick={handleNoteClick}
             size="small"
             sx={{
+              p: 0.5,
               color: 'text.secondary',
               '&:hover': {
                 backgroundColor: 'action.hover',

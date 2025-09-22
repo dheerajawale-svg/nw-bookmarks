@@ -47,7 +47,7 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   };
 
   return (
-    <Box sx={{ px: 2, pb: isEditing ? 1 : 2 }}>
+    <Box sx={{ px: 2, py: 1.5 }}>
       {isEditing ? (
         <Box>
           <TextField
@@ -62,12 +62,17 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
             sx={{
               mb: 2,
               '& .MuiOutlinedInput-root': {
-                fontSize: '0.875rem',
-                lineHeight: 1.43,
+                fontSize: '14px',
+                lineHeight: '20px',
                 minHeight: 80,
                 alignItems: 'flex-start',
+                fontFamily: 'inherit',
                 '& textarea': {
                   resize: 'vertical',
+                  padding: '8px 12px',
+                },
+                '& fieldset': {
+                  borderColor: 'divider',
                 },
               },
             }}
@@ -78,10 +83,11 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
               size="small"
               onClick={handleCancel}
               sx={{
-                fontSize: '0.75rem',
+                fontSize: '12px',
                 px: 2,
                 py: 0.5,
                 textTransform: 'none',
+                minHeight: 32,
               }}
             >
               Cancel
@@ -91,10 +97,11 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
               size="small"
               onClick={handleSave}
               sx={{
-                fontSize: '0.75rem',
+                fontSize: '12px',
                 px: 2,
                 py: 0.5,
                 textTransform: 'none',
+                minHeight: 32,
               }}
             >
               Save
@@ -106,13 +113,14 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
           variant="body2"
           onClick={handleEdit}
           sx={{
-            fontSize: '0.875rem',
-            lineHeight: 1.43,
+            fontSize: '14px',
+            lineHeight: '20px',
             color: 'text.primary',
             cursor: isEditable ? 'pointer' : 'default',
+            fontFamily: 'inherit',
             '&:hover': isEditable ? {
               backgroundColor: 'action.hover',
-              borderRadius: 1,
+              borderRadius: '4px',
             } : {},
             p: isEditable ? 1 : 0,
             mx: isEditable ? -1 : 0,

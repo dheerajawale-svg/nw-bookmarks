@@ -29,49 +29,56 @@ export const BookmarkHeader: React.FC<BookmarkHeaderProps> = ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'flex-start',
-        p: 2,
-        pb: 1,
+        px: 2,
+        pt: 2,
+        pb: 1.5,
       }}
     >
-      <Box sx={{ flex: 1, minWidth: 0 }}>
+      <Box sx={{ flex: 1, minWidth: 0, pr: 1 }}>
         <Typography
           variant="h6"
           sx={{
-            fontSize: '1rem',
+            fontSize: '16px',
             fontWeight: 600,
-            lineHeight: 1.25,
+            lineHeight: '20px',
             mb: 0.5,
             wordBreak: 'break-word',
+            color: 'text.primary',
           }}
         >
           {title}
         </Typography>
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <Box sx={{ 
+          display: 'flex', 
+          alignItems: 'center',
+          gap: 0.5,
+        }}>
           <Typography
             variant="body2"
             sx={{
-              fontSize: '0.75rem',
+              fontSize: '12px',
               color: 'text.secondary',
-              lineHeight: 1.17,
+              lineHeight: '14px',
             }}
           >
             {reference}
           </Typography>
           <Box
             sx={{
-              width: 1,
-              height: 1,
+              width: 2,
+              height: 2,
               backgroundColor: 'text.secondary',
               borderRadius: '50%',
               flexShrink: 0,
+              mx: 0.5,
             }}
           />
           <Typography
             variant="body2"
             sx={{
-              fontSize: '0.75rem',
+              fontSize: '12px',
               color: 'text.secondary',
-              lineHeight: 1.17,
+              lineHeight: '14px',
             }}
           >
             {timeRange}
@@ -83,8 +90,9 @@ export const BookmarkHeader: React.FC<BookmarkHeaderProps> = ({
           onClick={handleMenuClick}
           size="small"
           sx={{
-            ml: 1,
             flexShrink: 0,
+            color: 'text.secondary',
+            p: 0.5,
             '&:hover': {
               backgroundColor: 'action.hover',
             },

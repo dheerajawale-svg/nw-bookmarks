@@ -89,7 +89,7 @@ export const createAppTheme = (mode: 'light' | 'dark') => {
       borderRadius: 8, // 0.5rem equivalent
     },
     typography: {
-      fontFamily: 'inherit',
+      fontFamily: '"Inter", "Frutiger LT Std", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif',
       h1: {
         fontSize: '2rem',
         fontWeight: 600,
