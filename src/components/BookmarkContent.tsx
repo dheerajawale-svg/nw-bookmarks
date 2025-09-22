@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Box, Typography, TextField, Button, Stack } from '@mui/material';
 
 interface BookmarkContentProps {
   content: string;
@@ -13,21 +14,28 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
+  const textFieldRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (isEditing && textFieldRef.current) {
+      textFieldRef.current.focus();
+    }
+  }, [isEditing]);
 
   const handleEdit = () => {
-    if (isEditable) {
-      setIsEditing(true);
-    }
+    if (!isEditable) return;
+    setIsEditing(true);
+    setEditContent(content);
   };
 
   const handleSave = () => {
-    setIsEditing(false);
     onContentChange?.(editContent);
+    setIsEditing(false);
   };
 
   const handleCancel = () => {
-    setIsEditing(false);
     setEditContent(content);
+    setIsEditing(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -39,47 +47,81 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   };
 
   return (
-    <section className="flex flex-col items-start gap-2 self-stretch pt-1 pb-3 px-3 border-b border-b-card-state-normal-border border-solid max-sm:pt-1 max-sm:pb-2 max-sm:px-2 flex-grow">
+    <Box sx={{ px: 2, pb: isEditing ? 1 : 2 }}>
       {isEditing ? (
-        <div className="w-full flex flex-col gap-3">
-          <textarea
+        <Box>
+          <TextField
+            multiline
+            fullWidth
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full text-[#5F6363] text-xs font-normal leading-4 max-sm:text-[11px] max-sm:leading-[14px] bg-transparent border border-gray-300 rounded p-2 resize-none min-h-[60px]"
-            rows={3}
-            autoFocus
-            aria-label="Edit bookmark content"
+            inputRef={textFieldRef}
+            variant="outlined"
+            size="small"
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                fontSize: '0.875rem',
+                lineHeight: 1.43,
+                minHeight: 80,
+                alignItems: 'flex-start',
+                '& textarea': {
+                  resize: 'vertical',
+                },
+              },
+            }}
           />
-          <div className="flex gap-2">
-            <button
-              onClick={handleSave}
-              className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors font-medium"
-            >
-              Save
-            </button>
-            <button
+          <Stack direction="row" spacing={1} justifyContent="flex-end">
+            <Button
+              variant="outlined"
+              size="small"
               onClick={handleCancel}
-              className="px-3 py-1.5 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400 transition-colors font-medium"
+              sx={{
+                fontSize: '0.75rem',
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+              }}
             >
               Cancel
-            </button>
-          </div>
-        </div>
+            </Button>
+            <Button
+              variant="contained"
+              size="small"
+              onClick={handleSave}
+              sx={{
+                fontSize: '0.75rem',
+                px: 2,
+                py: 0.5,
+                textTransform: 'none',
+              }}
+            >
+              Save
+            </Button>
+          </Stack>
+        </Box>
       ) : (
-        <p
-          className={`self-stretch text-[#5F6363] text-xs font-normal leading-4 max-sm:text-[11px] max-sm:leading-[14px] ${
-            isEditable ? 'cursor-pointer hover:bg-gray-50 p-1 rounded' : ''
-          }`}
+        <Typography
+          variant="body2"
           onClick={handleEdit}
-          role={isEditable ? 'button' : undefined}
-          tabIndex={isEditable ? 0 : undefined}
-          onKeyDown={isEditable ? (e) => e.key === 'Enter' && handleEdit() : undefined}
-          aria-label={isEditable ? 'Click to edit content' : undefined}
+          sx={{
+            fontSize: '0.875rem',
+            lineHeight: 1.43,
+            color: 'text.primary',
+            cursor: isEditable ? 'pointer' : 'default',
+            '&:hover': isEditable ? {
+              backgroundColor: 'action.hover',
+              borderRadius: 1,
+            } : {},
+            p: isEditable ? 1 : 0,
+            mx: isEditable ? -1 : 0,
+            transition: 'background-color 0.2s ease',
+          }}
         >
           {content}
-        </p>
+        </Typography>
       )}
-    </section>
+    </Box>
   );
 };

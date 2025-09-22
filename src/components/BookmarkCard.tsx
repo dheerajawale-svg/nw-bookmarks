@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Card, CardContent, Box } from '@mui/material';
 import { BookmarkHeader } from './BookmarkHeader';
 import { BookmarkContent } from './BookmarkContent';
 import { BookmarkFooter } from './BookmarkFooter';
@@ -46,19 +47,6 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
     onContentChange?.(newContent);
   };
 
-  const getCardStyles = () => {
-    const baseStyles = "flex w-[556px] min-w-[336px] min-h-[128px] flex-col items-start border rounded-lg border-solid max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] transition-all duration-200 ease-in-out";
-    
-    switch (state) {
-      case 'disabled':
-        return `${baseStyles} bg-card-state-disabled border-card-state-disabled-border cursor-not-allowed`;
-      case 'selected':
-        return `${baseStyles} bg-card-state-selected border-card-state-selected-border relative overflow-hidden before:absolute before:inset-0 before:bg-card-state-selected-overlay before:pointer-events-none cursor-pointer`;
-      default:
-        return `${baseStyles} bg-card-state-normal border-card-state-normal-border ${onClick ? 'cursor-pointer hover:shadow-sm transition-shadow' : ''}`;
-    }
-  };
-
   const isInteractive = state !== 'disabled';
 
   const handleCardClick = () => {
@@ -68,29 +56,51 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   };
 
   return (
-    <article
-      className={`${getCardStyles()} ${className}`}
+    <Card
+      className={`card-state-${state} ${className}`}
+      onClick={handleCardClick}
+      sx={{
+        width: 556,
+        minWidth: 336,
+        minHeight: 128,
+        cursor: onClick && isInteractive ? 'pointer' : 'default',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': onClick && isInteractive ? {
+          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
+        } : {},
+        '@media (max-width: 768px)': {
+          width: '100%',
+          maxWidth: 556,
+          minWidth: 300,
+        },
+        '@media (max-width: 640px)': {
+          minWidth: 280,
+        },
+      }}
       role="article"
       aria-label={`Bookmark: ${title}`}
-      onClick={handleCardClick}
       aria-disabled={!isInteractive}
     >
-      <BookmarkHeader
-        title={title}
-        reference={reference}
-        timeRange={timeRange}
-        onMenuClick={isInteractive ? onMenuClick : undefined}
-      />
-      <BookmarkContent
-        content={cardContent}
-        isEditable={isEditable && isInteractive}
-        onContentChange={handleContentChange}
-      />
-      <BookmarkFooter
-        filters={filters}
-        userInitials={userInitials}
-        onNoteClick={isInteractive ? onNoteClick : undefined}
-      />
-    </article>
+      <CardContent sx={{ p: 0, '&:last-child': { pb: 0 } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+          <BookmarkHeader
+            title={title}
+            reference={reference}
+            timeRange={timeRange}
+            onMenuClick={isInteractive ? onMenuClick : undefined}
+          />
+          <BookmarkContent
+            content={cardContent}
+            isEditable={isEditable && isInteractive}
+            onContentChange={handleContentChange}
+          />
+          <BookmarkFooter
+            filters={filters}
+            userInitials={userInitials}
+            onNoteClick={isInteractive ? onNoteClick : undefined}
+          />
+        </Box>
+      </CardContent>
+    </Card>
   );
 };
