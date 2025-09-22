@@ -119,7 +119,7 @@ const Index = () => {
 
       <Grid container spacing={3}>
         {bookmarks.map((bookmark) => (
-          <Grid key={bookmark.id} xs={12} md={6} xl={4}>
+          <Grid key={bookmark.id} size={{ xs: 12, md: 6, xl: 4 }}>
             <BookmarkCard
               title={bookmark.title}
               reference={bookmark.reference}
