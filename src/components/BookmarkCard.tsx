@@ -47,7 +47,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   };
 
   const getCardStyles = () => {
-    const baseStyles = "flex w-[556px] min-w-[336px] max-h-[700px] flex-col items-start border h-32 rounded-lg border-solid max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] max-sm:p-2";
+    const baseStyles = "flex w-[556px] min-w-[336px] min-h-[128px] flex-col items-start border rounded-lg border-solid max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] transition-all duration-200 ease-in-out";
     
     switch (state) {
       case 'disabled':

@@ -39,28 +39,28 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   };
 
   return (
-    <section className="flex flex-col items-start gap-2 self-stretch pt-1 pb-3 px-3 border-b-[#EAEBEB] border-b border-solid max-sm:pt-1 max-sm:pb-2 max-sm:px-2">
+    <section className="flex flex-col items-start gap-2 self-stretch pt-1 pb-3 px-3 border-b border-b-card-state-normal-border border-solid max-sm:pt-1 max-sm:pb-2 max-sm:px-2 flex-grow">
       {isEditing ? (
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-3">
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full text-[#5F6363] text-xs font-normal leading-4 max-sm:text-[11px] max-sm:leading-[14px] bg-transparent border border-gray-300 rounded p-2 resize-none"
+            className="w-full text-[#5F6363] text-xs font-normal leading-4 max-sm:text-[11px] max-sm:leading-[14px] bg-transparent border border-gray-300 rounded p-2 resize-none min-h-[60px]"
             rows={3}
             autoFocus
             aria-label="Edit bookmark content"
           />
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2">
             <button
               onClick={handleSave}
-              className="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
+              className="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors font-medium"
             >
               Save
             </button>
             <button
               onClick={handleCancel}
-              className="px-3 py-1 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400 transition-colors"
+              className="px-3 py-1.5 bg-gray-300 text-gray-700 text-xs rounded hover:bg-gray-400 transition-colors font-medium"
             >
               Cancel
             </button>
