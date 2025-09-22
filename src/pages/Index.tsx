@@ -138,12 +138,9 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Medical Annotation System
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Manage and review medical study annotations with advanced filtering and collaborative features.
-          </p>
         </header>
 
         <main>
