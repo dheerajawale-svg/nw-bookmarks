@@ -163,7 +163,6 @@ const Index = () => {
                   userInitials={bookmark.userInitials}
                   isEditable={bookmark.state !== 'disabled'}
                   state={getBookmarkState(bookmark)}
-                  className="mx-auto"
                   onContentChange={(newContent) => handleContentChange(bookmark.id, newContent)}
                   onMenuClick={() => handleMenuClick(bookmark.id)}
                   onNoteClick={() => handleNoteClick(bookmark.id)}
