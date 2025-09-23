@@ -1,6 +1,9 @@
+
 import React, { useState } from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
-import { MoreHoriz } from '@mui/icons-material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
 
 interface BookmarkHeaderProps {
   title: string;
@@ -17,90 +20,76 @@ export const BookmarkHeader: React.FC<BookmarkHeaderProps> = ({
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleMenuClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleMenuClick = () => {
     setIsMenuOpen(!isMenuOpen);
     onMenuClick?.();
   };
 
   return (
     <Box
+      component="header"
       sx={{
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        px: 2,
-        pt: 2,
-        pb: 1.5,
+        alignItems: 'center',
+        gap: 3,
+        alignSelf: 'stretch',
+        pl: 3,
+        pr: 2,
+        py: 1,
+        '@media (max-width: 640px)': {
+          px: 2,
+          py: 1,
+        },
       }}
     >
-      <Box sx={{ flex: 1, minWidth: 0, pr: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: '1 0 0', pt: 0.5 }}>
         <Typography
-          variant="h6"
-          sx={{
-            fontSize: '16px',
-            fontWeight: 600,
-            lineHeight: '20px',
-            mb: 0.5,
-            wordBreak: 'break-word',
-            color: 'text.primary',
-          }}
+          component="h2"
+          sx={{ color: '#2D2F2F', fontSize: '0.75rem', fontWeight: 400, lineHeight: '15.6px' }}
         >
           {title}
         </Typography>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center',
-          gap: 0.5,
-        }}>
-          <Typography
-            variant="body2"
-            sx={{
-              fontSize: '12px',
-              color: 'text.secondary',
-              lineHeight: '14px',
-            }}
-          >
-            {reference}
-          </Typography>
-          <Box
-            sx={{
-              width: 2,
-              height: 2,
-              backgroundColor: 'text.secondary',
-              borderRadius: '50%',
-              flexShrink: 0,
-              mx: 0.5,
-            }}
-          />
-          <Typography
-            variant="body2"
-            sx={{
-              fontSize: '12px',
-              color: 'text.secondary',
-              lineHeight: '14px',
-            }}
-          >
-            {timeRange}
-          </Typography>
-        </Box>
+        <Typography
+          component="span"
+          sx={{ color: '#929696', fontSize: '0.75rem', fontWeight: 400, lineHeight: '1rem' }}
+        >
+          {reference}
+        </Typography>
       </Box>
-      {onMenuClick && (
+      <Typography
+        component="time"
+        sx={{ color: '#2D2F2F', fontSize: '0.75rem', fontWeight: 400, lineHeight: '1rem' }}
+      >
+        {timeRange}
+      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Divider orientation="vertical" flexItem sx={{ height: 24, borderColor: '#EAEBEB', mx: 0.5 }} />
         <IconButton
           onClick={handleMenuClick}
+          aria-label="More options"
+          aria-expanded={isMenuOpen}
           size="small"
           sx={{
-            flexShrink: 0,
-            color: 'text.secondary',
-            p: 0.5,
-            '&:hover': {
-              backgroundColor: 'action.hover',
-            },
+            p: 1,
+            borderRadius: 2,
+            transition: 'background-color 150ms',
+            '&:hover': { backgroundColor: 'grey.100' },
           }}
         >
-          <MoreHoriz sx={{ fontSize: 20 }} />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ width: 16, height: 16 }}
+          >
+            <circle cx="12.4" cy="7.6" r="1.2" fill="#707575" />
+            <circle cx="8.4" cy="7.6" r="1.2" fill="#707575" />
+            <circle cx="4.4" cy="7.6" r="1.2" fill="#707575" />
+          </svg>
         </IconButton>
-      )}
+      </Box>
     </Box>
   );
 };
