@@ -232,9 +232,6 @@ const Index = () => {
             </section>
           </main>
         </div>
-        <div className="py-8 px-4" style={{ backgroundColor: "#e5e5e5" }}>
-          <CommentSection />
-        </div>
       </div>
   );
 };

@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import { Button } from '@mui/material';
+import { CommentSection } from './comments/CommentSection';
 
 interface BookmarkContentProps {
   content: string;
@@ -20,6 +21,7 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [isHovered, setIsHovered] = useState(false);
+  const editableAreaRef = useRef<HTMLDivElement | null>(null);
 
   const handleEdit = () => {
     if (isEditable) {
@@ -32,10 +34,10 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
     onContentChange?.(editContent);
   };
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsEditing(false);
     setEditContent(content);
-  };
+  }, [content]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && e.ctrlKey) {
@@ -44,6 +46,29 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
       handleCancel();
     }
   };
+
+  useEffect(() => {
+    if (!isEditing) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (
+        editableAreaRef.current &&
+        !editableAreaRef.current.contains(event.target as Node)
+      ) {
+        handleCancel();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isEditing, handleCancel]);
 
   return (
     <Box
@@ -61,44 +86,8 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
       }}
     >
       {isEditing ? (
-        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-          <TextField
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-            onKeyDown={handleKeyDown}
-            multiline
-            minRows={3}
-            autoFocus
-            aria-label="Edit bookmark content"
-            variant="outlined"
-            size="small"
-            sx={{
-              width: '100%',
-              fontSize: '0.75rem',
-              lineHeight: '1rem',
-              color: '#5F6363',
-              backgroundColor: 'transparent',
-              fontWeight: 400,
-            }}
-          />
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              onClick={handleSave}
-              variant="default"
-              size="sm"
-              sx={{ borderRadius: '6px' }}
-            >
-              Save
-            </Button>
-            <Button
-              onClick={handleCancel}
-              variant="outline"
-              size="sm"
-              sx={{ borderRadius: '6px' }}
-            >
-              Cancel
-            </Button>
-          </Box>
+        <Box ref={editableAreaRef} sx={{ width: '100%' }}>
+          <CommentSection />
         </Box>
       ) : (
         <Typography
