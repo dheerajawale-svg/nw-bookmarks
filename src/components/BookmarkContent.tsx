@@ -1,5 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Typography, TextField, Button, Stack } from '@mui/material';
+
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 
 interface BookmarkContentProps {
   content: string;
@@ -14,28 +19,22 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
-  const textFieldRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (isEditing && textFieldRef.current) {
-      textFieldRef.current.focus();
-    }
-  }, [isEditing]);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleEdit = () => {
-    if (!isEditable) return;
-    setIsEditing(true);
-    setEditContent(content);
+    if (isEditable) {
+      setIsEditing(true);
+    }
   };
 
   const handleSave = () => {
-    onContentChange?.(editContent);
     setIsEditing(false);
+    onContentChange?.(editContent);
   };
 
   const handleCancel = () => {
-    setEditContent(content);
     setIsEditing(false);
+    setEditContent(content);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -47,89 +46,88 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   };
 
   return (
-    <Box sx={{ px: 2, py: 1.5 }}>
+    <Box
+      component="section"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 1,
+        alignSelf: 'stretch',
+        pt: 0.5,
+        pb: 0.5,
+        px: 1.5,
+        flexGrow: 1,
+      }}
+    >
       {isEditing ? (
-        <Box>
+        <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <TextField
-            multiline
-            fullWidth
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             onKeyDown={handleKeyDown}
-            inputRef={textFieldRef}
+            multiline
+            minRows={3}
+            autoFocus
+            aria-label="Edit bookmark content"
             variant="outlined"
             size="small"
             sx={{
-              mb: 2,
-              '& .MuiOutlinedInput-root': {
-                fontSize: '14px',
-                lineHeight: '20px',
-                minHeight: 80,
-                alignItems: 'flex-start',
-                fontFamily: 'inherit',
-                '& textarea': {
-                  resize: 'vertical',
-                  padding: '8px 12px',
-                },
-                '& fieldset': {
-                  borderColor: 'divider',
-                },
-              },
+              width: '100%',
+              fontSize: '0.75rem',
+              lineHeight: '1rem',
+              color: '#5F6363',
+              backgroundColor: 'transparent',
+              fontWeight: 400,
             }}
           />
-          <Stack direction="row" spacing={1} justifyContent="flex-end">
+          <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
-              variant="outlined"
-              size="small"
-              onClick={handleCancel}
-              sx={{
-                fontSize: '12px',
-                px: 2,
-                py: 0.5,
-                textTransform: 'none',
-                minHeight: 32,
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
               onClick={handleSave}
-              sx={{
-                fontSize: '12px',
-                px: 2,
-                py: 0.5,
-                textTransform: 'none',
-                minHeight: 32,
-              }}
+              variant="contained"
+              color="primary"
+              size="small"
+              sx={{ borderRadius: '6px' }}
             >
               Save
             </Button>
-          </Stack>
+            <Button
+              onClick={handleCancel}
+              variant="outlined"
+              color="inherit"
+              size="small"
+              sx={{ borderRadius: '6px' }}
+            >
+              Cancel
+            </Button>
+          </Box>
         </Box>
       ) : (
         <Typography
-          variant="body2"
-          onClick={handleEdit}
           sx={{
-            fontSize: '14px',
-            lineHeight: '20px',
-            color: 'text.primary',
+            alignSelf: 'stretch',
+            color: '#5F6363',
+            fontSize: '0.75rem',
+            lineHeight: '1rem',
+            fontWeight: 400,
+            m: 0,
             cursor: isEditable ? 'pointer' : 'default',
-            fontFamily: 'inherit',
-            '&:hover': isEditable ? {
-              backgroundColor: 'action.hover',
-              borderRadius: '4px',
-            } : {},
-            p: isEditable ? 1 : 0,
-            mx: isEditable ? -1 : 0,
-            transition: 'background-color 0.2s ease',
+            p: isEditable ? '4px' : 0,
+            borderRadius: isEditable ? '4px' : 0,
+            backgroundColor: isEditable && isHovered ? '#f9fafb' : 'transparent',
+            transition: 'background-color 150ms ease',
           }}
+          onClick={handleEdit}
+          role={isEditable ? 'button' : undefined}
+          tabIndex={isEditable ? 0 : undefined}
+          onKeyDown={isEditable ? (e) => e.key === 'Enter' && handleEdit() : undefined}
+          aria-label={isEditable ? 'Click to edit content' : undefined}
+          onMouseEnter={isEditable ? () => setIsHovered(true) : undefined}
+          onMouseLeave={isEditable ? () => setIsHovered(false) : undefined}
         >
           {content}
         </Typography>
-      )}
+      )}      
     </Box>
   );
 };

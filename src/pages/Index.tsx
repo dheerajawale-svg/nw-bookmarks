@@ -1,154 +1,237 @@
-import React, { useState } from 'react';
-import { Container, Typography, Box, Grid } from '@mui/material';
-import { BookmarkCard } from '@/components/BookmarkCard';
-
-interface Filter {
-  type: 'lf' | 'hf' | 'notch';
-  value: string;
-}
-
-interface Bookmark {
-  id: string;
-  title: string;
-  reference: string;
-  timeRange: string;
-  content: string;
-  filters: Filter[];
-  userInitials: string;
-  isDisabled?: boolean;
-}
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from "react";
+import { BookmarkCard } from "@/components/BookmarkCard";
 const Index = () => {
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [bookmarks] = useState<Bookmark[]>([
+  const [selectedIds, setSelectedIds] = useState<number[]>([2]);
+  const [bookmarks, setBookmarks] = useState([
     {
-      id: '1',
-      title: 'Neural Network Architecture Analysis',
-      reference: 'Research Paper #001',
-      timeRange: '2h ago',
-      content: 'This research explores the effectiveness of transformer architectures in natural language processing tasks. The study compares various attention mechanisms and their impact on model performance across different datasets.',
+      id: 1,
+      title: "Bookmark1",
+      reference: "F3-REF - C4-REF",
+      timeRange: "01:02:08 - 01:44:12",
+      content: "Marked for follow-up. This portion of the study requires confirmation of annotation accuracy and may need to be cross-checked with other physiological signals.",
       filters: [
-        { type: 'lf', value: '125Hz' },
-        { type: 'hf', value: '30Hz' },
-        { type: 'notch', value: '50Hz' }
+        {
+          type: "lf" as const,
+          value: "3 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "15 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "50 Hz",
+        },
       ],
-      userInitials: 'JD',
+      userInitials: "JD",
+      state: "normal" as const,
     },
     {
-      id: '2',
-      title: 'Machine Learning Model Optimization',
-      reference: 'Study #042',
-      timeRange: '5h ago',
-      content: 'An in-depth analysis of hyperparameter tuning techniques for deep learning models. This study focuses on automated optimization methods and their effectiveness in reducing training time.',
+      id: 2,
+      title: "Bookmark2",
+      reference: "F4-REF - C3-REF",
+      timeRange: "02:15:30 - 02:45:22",
+      content: "Significant artifact detected during this segment. Recommend manual review of electrode placement and signal quality before final analysis.",
       filters: [
-        { type: 'lf', value: '100Hz' },
-        { type: 'hf', value: '25Hz' }
+        {
+          type: "lf" as const,
+          value: "1 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "30 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "60 Hz",
+        },
       ],
-      userInitials: 'AS',
-      isDisabled: true,
+      userInitials: "AM",
+      state: "selected" as const,
     },
     {
-      id: '3',
-      title: 'Data Preprocessing Techniques',
-      reference: 'Report #123',
-      timeRange: '1d ago',
-      content: 'Comprehensive review of data preprocessing methods for time-series analysis. Covers normalization, filtering, and feature extraction techniques commonly used in signal processing.',
+      id: 3,
+      title: "Bookmark3",
+      reference: "O1-REF - O2-REF",
+      timeRange: "00:45:12 - 01:12:08",
+      content: "Normal alpha rhythm observed in occipital regions. Patient was in relaxed, eyes-closed state. Good signal quality throughout this segment.",
       filters: [
-        { type: 'notch', value: '60Hz' }
+        {
+          type: "lf" as const,
+          value: "0.5 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "35 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "50 Hz",
+        },
       ],
-      userInitials: 'MK',
+      userInitials: "RK",
+      state: "normal" as const,
+    },
+    {
+      id: 4,
+      title: "Bookmark4",
+      reference: "T3-REF - T4-REF",
+      timeRange: "03:22:45 - 03:58:12",
+      content: "This segment is currently under review for data integrity issues. Access temporarily restricted pending validation.",
+      filters: [
+        {
+          type: "lf" as const,
+          value: "2 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "25 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "60 Hz",
+        },
+      ],
+      userInitials: "SM",
+      state: "disabled" as const,
+    },
+    {
+      id: 5,
+      title: "Bookmark5",
+      reference: "Fp1-REF - Fp2-REF",
+      timeRange: "04:10:33 - 04:42:18",
+      content: "Excellent frontal lobe activity captured during cognitive testing phase. Clear P300 response patterns visible.",
+      filters: [
+        {
+          type: "lf" as const,
+          value: "0.1 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "40 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "50 Hz",
+        },
+      ],
+      userInitials: "LP",
+      state: "normal" as const,
+    },
+    {
+      id: 6,
+      title: "Bookmark6",
+      reference: "C3-REF - Cz-REF",
+      timeRange: "05:15:20 - 05:48:55",
+      content: "Equipment malfunction detected during this recording period. Data may be corrupted or incomplete.",
+      filters: [
+        {
+          type: "lf" as const,
+          value: "1.5 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "20 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "50 Hz",
+        },
+      ],
+      userInitials: "KR",
+      state: "disabled" as const,
+    },
+    {
+      id: 7,
+      title: "Bookmark7",
+      reference: "Pz-REF - P4-REF",
+      timeRange: "06:05:12 - 06:38:44",
+      content: "Exceptional parietal activity during spatial reasoning tasks. Strong gamma band synchronization observed.",
+      filters: [
+        {
+          type: "lf" as const,
+          value: "4 Hz",
+        },
+        {
+          type: "hf" as const,
+          value: "80 Hz",
+        },
+        {
+          type: "notch" as const,
+          value: "60 Hz",
+        },
+      ],
+      userInitials: "MT",
+      state: "selected" as const,
     },
   ]);
 
-  const handleContentChange = (id: string, content: string) => {
-    console.log('Content changed for bookmark', id, ':', content);
-  };
-
-  const handleMenuClick = (id: string) => {
-    console.log('Menu clicked for bookmark', id);
-  };
-
-  const handleNoteClick = (id: string) => {
-    console.log('Note clicked for bookmark', id);
-  };
-
-  const handleCardClick = (id: string, isDisabled?: boolean) => {
-    if (isDisabled) return;
-    
-    setSelectedIds(prev => 
-      prev.includes(id) 
-        ? prev.filter(selectedId => selectedId !== id)
-        : [...prev, id]
+  const handleContentChange = (id: number, newContent: string) => {
+    setBookmarks((prev) =>
+      prev.map((bookmark) =>
+        bookmark.id === id
+          ? {
+              ...bookmark,
+              content: newContent,
+            }
+          : bookmark
+      )
     );
   };
 
-  const getBookmarkState = (bookmark: Bookmark): 'normal' | 'disabled' | 'selected' => {
-    if (bookmark.isDisabled) return 'disabled';
-    if (selectedIds.includes(bookmark.id)) return 'selected';
-    return 'normal';
+  const handleMenuClick = (id: number) => {
+    console.log(`Menu clicked for bookmark ${id}`);
+  };
+
+  const handleNoteClick = (id: number) => {
+    console.log(`Note clicked for bookmark ${id}`);
+  };
+
+  const handleCardClick = (id: number) => {
+    const bookmark = bookmarks.find((b) => b.id === id);
+    if (bookmark?.state === "disabled") return;
+    setSelectedIds((prev) => (prev.includes(id) ? prev.filter((selectedId) => selectedId !== id) : [...prev, id]));
+  };
+
+  const getBookmarkState = (bookmark: any): "normal" | "disabled" | "selected" => {
+    if (bookmark.state === "disabled") return "disabled";
+    return selectedIds.includes(bookmark.id) ? "selected" : "normal";
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        backgroundColor: 'background.default',
-        py: 4,
-      }}
-    >
-      <Container maxWidth="lg">
-        <Box sx={{ mb: 4 }}>
-          <Typography 
-            variant="h1" 
-            sx={{ 
-              fontSize: '32px',
-              fontWeight: 600,
-              mb: 1,
-              color: 'text.primary',
-              fontFamily: 'inherit',
-            }}
-          >
-            Bookmarks
-          </Typography>
-        </Box>
+      <div className="min-h-scree py-8 px-4" style={{ backgroundColor: "#e5e5e5" }}>
+        <div className="max-w-4xl">
+          <header className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">NW Bookmarks</h1>
+          </header>
 
-        <Box sx={{ mb: 3 }}>
-          <Typography 
-            variant="h2" 
-            sx={{ 
-              fontSize: '24px',
-              fontWeight: 600,
-              color: 'text.primary',
-              fontFamily: 'inherit',
-            }}
-          >
-            Recent Bookmarks
-          </Typography>
-        </Box>
-
-        <Grid container spacing={3}>
-          {bookmarks.map((bookmark) => (
-            <Grid key={bookmark.id} size={12}>
-              <BookmarkCard
-                title={bookmark.title}
-                reference={bookmark.reference}
-                timeRange={bookmark.timeRange}
-                content={bookmark.content}
-                filters={bookmark.filters}
-                userInitials={bookmark.userInitials}
-                isEditable={true}
-                state={getBookmarkState(bookmark)}
-                onContentChange={(content) => handleContentChange(bookmark.id, content)}
-                onMenuClick={() => handleMenuClick(bookmark.id)}
-                onNoteClick={() => handleNoteClick(bookmark.id)}
-                onClick={() => handleCardClick(bookmark.id, bookmark.isDisabled)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+          <main>
+            <section className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Bookmarks</h2>
+              <div className="space-y-4">
+                {bookmarks.map((bookmark) => (
+                  <BookmarkCard
+                    key={bookmark.id}
+                    title={bookmark.title}
+                    reference={bookmark.reference}
+                    timeRange={bookmark.timeRange}
+                    content={bookmark.content}
+                    filters={bookmark.filters}
+                    userInitials={bookmark.userInitials}
+                    isEditable={bookmark.state !== "disabled"}
+                    state={getBookmarkState(bookmark)}
+                    onContentChange={(newContent) => handleContentChange(bookmark.id, newContent)}
+                    onMenuClick={() => handleMenuClick(bookmark.id)}
+                    onNoteClick={() => handleNoteClick(bookmark.id)}
+                    onClick={() => handleCardClick(bookmark.id)}
+                  />
+                ))}
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
   );
 };
-
 export default Index;
