@@ -2,16 +2,9 @@ import { Components, Theme } from "@mui/material/styles";
 
 export const MuiButton: Components<Theme>["MuiButton"] = {
   styleOverrides: {
-    root: ({ theme, ownerState }) => ({
-      borderRadius: "calc(var(--radius) - 2px)",
-      fontWeight: 500,
-      transition: "all 150ms ease-in-out",
-      textTransform: "none",
-      "&:focus-visible": {
-        outline: "2px solid hsl(var(--ring))",
-        outlineOffset: "2px",
-      },
-    }),
+    root: {
+      textTransform: 'none',
+    },
   },
   variants: [
     {

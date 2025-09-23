@@ -1,48 +1,27 @@
 export const createPalette = () => ({
   mode: "light" as const,
   primary: {
-    main: "hsl(var(--primary))",
-    contrastText: "hsl(var(--primary-foreground))",
+    main: "hsl(186, 100%, 30%)", // rgba(0, 140, 154, 1)
   },
   secondary: {
-    main: "hsl(var(--secondary))",
-    contrastText: "hsl(var(--secondary-foreground))",
-  },
-  error: {
-    main: "hsl(var(--destructive))",
-    contrastText: "hsl(var(--destructive-foreground))",
-  },
-  warning: {
-    main: "hsl(var(--warning))",
-    contrastText: "hsl(var(--warning-foreground))",
-  },
-  info: {
-    main: "hsl(var(--info))",
-    contrastText: "hsl(var(--info-foreground))",
-  },
-  success: {
-    main: "hsl(var(--success))",
-    contrastText: "hsl(var(--success-foreground))",
-  },
-  background: {
-    default: "hsl(var(--background))",
-    paper: "hsl(var(--card))",
+    main: "hsl(179, 100%, 28%)", // rgba(0, 143, 140, 1)
   },
   text: {
-    primary: "hsl(var(--foreground))",
-    secondary: "hsl(var(--muted-foreground))",
+    primary: "hsl(180, 2%, 18%)", // rgba(45, 47, 47, 1)
+    secondary: "hsl(180, 2%, 38%)", // rgba(95, 99, 99, 1)
   },
-  divider: "hsl(var(--border))",
+  background: {
+    default: "hsl(180, 4%, 96%)", // rgba(244, 245, 245, 1)
+    paper: "hsl(180, 17%, 99%)", // rgba(252, 253, 253, 1)
+  },
   grey: {
-    50: "#fafafa",
-    100: "#f5f5f5",
-    200: "#eeeeee",
-    300: "#e0e0e0",
-    400: "#bdbdbd",
-    500: "#9e9e9e",
-    600: "#757575",
-    700: "#616161",
-    800: "#424242",
-    900: "#212121",
+    50: "hsl(180, 4%, 96%)", // rgba(244, 245, 245, 1)
+    100: "hsl(180, 2%, 92%)", // rgba(234, 235, 235, 1)
+    300: "hsl(180, 1%, 58%)", // rgba(146, 150, 150, 1)
+    400: "hsl(180, 2%, 45%)", // rgba(112, 117, 117, 1)
+    500: "hsl(180, 2%, 38%)", // rgba(95, 99, 99, 1)
+    600: "hsl(0, 0%, 28%)", // rgba(71, 71, 71, 1)
+    800: "hsl(180, 2%, 18%)", // rgba(45, 47, 47, 1)
+    900: "hsl(180, 2%, 8%)", // rgba(20, 21, 21, 1)
   },
 });
