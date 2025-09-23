@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import { Button } from '@/components/ui/button';
 
 interface BookmarkContentProps {
   content: string;
@@ -84,18 +84,16 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
           <Box sx={{ display: 'flex', gap: 1 }}>
             <Button
               onClick={handleSave}
-              variant="contained"
-              color="primary"
-              size="small"
+              variant="default"
+              size="sm"
               sx={{ borderRadius: '6px' }}
             >
               Save
             </Button>
             <Button
               onClick={handleCancel}
-              variant="outlined"
-              color="inherit"
-              size="small"
+              variant="outline"
+              size="sm"
               sx={{ borderRadius: '6px' }}
             >
               Cancel

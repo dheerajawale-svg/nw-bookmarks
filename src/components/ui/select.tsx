@@ -13,6 +13,7 @@ import {
 import type { ComponentProps, MutableRefObject, PropsWithChildren, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "./button";
+import { type SxProps, type Theme } from "@mui/material/styles";
 
 interface SelectContextValue {
   value?: string;
@@ -155,7 +156,7 @@ export const Select = ({
       triggerRef,
       triggerWidth,
     }),
-    [currentValue, disabled, handleSelect, open, placeholder, registerItem, selectedLabel, triggerWidth, unregisterItem],
+    [currentValue, disabled, handleSelect, open, placeholder, registerItem, selectedLabel, triggerWidth, unregisterItem, setOpen],
   );
 
   return (
@@ -178,10 +179,37 @@ const mergeRefs = <T,>(...refs: Array<React.Ref<T> | undefined>) =>
     });
   };
 
-export interface SelectTriggerProps extends Omit<ButtonProps, "variant" | "size"> {}
+export type SelectTriggerProps = Omit<ButtonProps, "variant" | "size">;
+
+const baseTriggerStyles: SxProps<Theme> = {
+  display: "flex",
+  width: "100%",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 2,
+  border: "1px solid hsl(var(--input))",
+  backgroundColor: "hsl(var(--background))",
+  padding: "0.5rem 0.75rem",
+  fontSize: "0.875rem",
+  color: "hsl(var(--foreground))",
+  boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+  transition: "color 150ms ease-in-out, background-color 150ms ease-in-out, border-color 150ms ease-in-out",
+  "&:focus-visible": {
+    outline: "2px solid hsl(var(--ring))",
+    outlineOffset: "2px",
+  },
+  "&:hover": {
+    backgroundColor: "hsl(var(--accent))",
+    color: "hsl(var(--accent-foreground))",
+  },
+  "&:disabled": {
+    pointerEvents: "none",
+    opacity: 0.5,
+  },
+};
 
 export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
-  ({ className, children, onClick, disabled: disabledProp, ...props }, ref) => {
+  ({ sx, children, onClick, disabled: disabledProp, ...props }, ref) => {
     const ctx = useSelectContext();
     const handleClick: NonNullable<SelectTriggerProps["onClick"]> = (event) => {
       onClick?.(event);
@@ -197,15 +225,23 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
         ref={mergeRefs(ref, ctx.triggerRef)}
         onClick={handleClick}
         disabled={ctx.disabled ?? disabledProp}
-        className={cn(
-          "flex w-full items-center justify-between gap-2 border border-input bg-background px-3 py-2 text-sm text-foreground shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-          className,
-        )}
+        sx={[baseTriggerStyles, ...(Array.isArray(sx) ? sx : [sx])].filter(Boolean)}
       >
-        <span className="flex-1 truncate text-left">
+        <span style={{ flex: 1, textAlign: "left", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {children ?? <SelectValue />}
         </span>
-        <span aria-hidden className="ml-2 flex h-4 w-4 items-center justify-center text-muted-foreground">
+        <span
+          aria-hidden
+          style={{
+            marginLeft: "0.5rem",
+            display: "flex",
+            height: "1rem",
+            width: "1rem",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "hsl(var(--muted-foreground))",
+          }}
+        >
           ▼
         </span>
       </Button>
@@ -234,7 +270,7 @@ export const SelectValue = ({ placeholder: placeholderProp, className }: SelectV
 
 SelectValue.displayName = "SelectValue";
 
-export interface SelectContentProps extends Omit<MenuProps, "open"> {}
+export type SelectContentProps = Omit<MenuProps, "open">;
 
 export const SelectContent = ({
   className,
@@ -326,7 +362,7 @@ export const SelectItem = forwardRef<HTMLLIElement, SelectItemProps>(
 
 SelectItem.displayName = "SelectItem";
 
-export interface SelectLabelProps extends ListSubheaderProps {}
+export type SelectLabelProps = ListSubheaderProps;
 
 export const SelectLabel = forwardRef<HTMLLIElement, SelectLabelProps>(
   ({ className, ...props }, ref) => (

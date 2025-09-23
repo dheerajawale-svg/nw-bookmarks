@@ -1,20 +1,41 @@
 import React from 'react';
+import { type SxProps, type Theme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 interface AvatarProps {
   initials: string;
-  className?: string;
+  sx?: SxProps<Theme>;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ initials, className = '' }) => {
+export const Avatar: React.FC<AvatarProps> = ({ initials, sx }) => {
   return (
-    <div
-      className={`flex w-6 h-6 flex-col justify-center items-center bg-[rgba(0,140,154,0.10)] rounded-[200px] ${className}`}
+    <Box
+      sx={{
+        display: 'flex',
+        width: '1.5rem', // w-6
+        height: '1.5rem', // h-6
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,140,154,0.10)',
+        borderRadius: '50%', // rounded-[200px]
+        ...sx,
+      }}
       role="img"
       aria-label={`Avatar for ${initials}`}
     >
-      <span className="text-[#008C9A] text-center text-[11px] font-normal leading-[14px]">
+      <Typography
+        sx={{
+          color: '#008C9A', // text-[#008C9A]
+          textAlign: 'center',
+          fontSize: '11px', // text-[11px]
+          fontWeight: 400, // font-normal
+          lineHeight: '14px', // leading-[14px]
+        }}
+      >
         {initials}
-      </span>
-    </div>
+      </Typography>
+    </Box>
   );
 };
