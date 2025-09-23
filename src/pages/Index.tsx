@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { BookmarkCard } from "@/components/BookmarkCard";
+import { CommentSection } from "@/components/comments/CommentSection";
 const Index = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([2]);
   const [bookmarks, setBookmarks] = useState([
@@ -200,7 +201,7 @@ const Index = () => {
   };
 
   return (
-      <div className="min-h-scree py-8 px-4" style={{ backgroundColor: "#e5e5e5" }}>
+      <div className="py-8 px-4" style={{ backgroundColor: "#e5e5e5" }}>
         <div className="max-w-4xl">
           <header className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-6">NW Bookmarks</h1>
@@ -230,6 +231,9 @@ const Index = () => {
               </div>
             </section>
           </main>
+        </div>
+        <div className="py-8 px-4" style={{ backgroundColor: "#e5e5e5" }}>
+          <CommentSection />
         </div>
       </div>
   );
