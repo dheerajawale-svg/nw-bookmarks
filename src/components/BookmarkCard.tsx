@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Box from '@mui/material/Box';
 import { BookmarkHeader } from './BookmarkHeader';
 import { BookmarkContent } from './BookmarkContent';
 import { BookmarkFooter } from './BookmarkFooter';
@@ -47,15 +48,49 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   };
 
   const getCardStyles = () => {
-    const baseStyles = "flex w-[556px] min-w-[336px] min-h-[128px] flex-col items-start border rounded-lg border-solid max-md:w-full max-md:max-w-[556px] max-md:min-w-[300px] max-sm:min-w-[280px] transition-all duration-200 ease-in-out";
-    
+    const baseStyles = {
+      display: 'flex',
+      flexDirection: 'column' as const,
+      alignItems: 'flex-start' as const,
+      alignSelf: 'stretch' as const,
+      borderRadius: '12px',
+      border: '1px solid #EAEBEB',
+      backgroundColor: '#FFFFFF',
+      transition: 'all 150ms ease-in-out',
+      cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
+      width: '556px',
+      minWidth: '336px',
+      minHeight: '128px',
+      '@media (max-width: 768px)': {
+        width: '100%',
+        maxWidth: '556px',
+        minWidth: '300px',
+      },
+      '@media (max-width: 640px)': {
+        minWidth: '280px',
+      },
+    };
+
     switch (state) {
-      case 'disabled':
-        return `${baseStyles} bg-card-state-disabled border-card-state-disabled-border cursor-not-allowed`;
       case 'selected':
-        return `${baseStyles} bg-card-state-selected border-card-state-selected-border relative overflow-hidden before:absolute before:inset-0 before:bg-card-state-selected-overlay before:pointer-events-none cursor-pointer`;
+        return {
+          ...baseStyles,
+          border: '2px solid #008C9A',
+          boxShadow: '0 0 0 1px rgba(0, 140, 154, 0.1)',
+        };
+      case 'disabled':
+        return {
+          ...baseStyles,
+          backgroundColor: '#F8F9FA',
+          opacity: 0.6,
+        };
       default:
-        return `${baseStyles} bg-card-state-normal border-card-state-normal-border ${onClick ? 'cursor-pointer hover:shadow-sm transition-shadow' : ''}`;
+        return {
+          ...baseStyles,
+          '&:hover': onClick ? {
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+          } : {},
+        };
     }
   };
 
@@ -68,12 +103,14 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   };
 
   return (
-    <article
-      className={`${getCardStyles()} ${className}`}
-      role="article"
-      aria-label={`Bookmark: ${title}`}
+    <Box
+      component="article"
+      sx={getCardStyles()}
       onClick={handleCardClick}
-      aria-disabled={!isInteractive}
+      role="button"
+      tabIndex={state === 'disabled' ? -1 : 0}
+      aria-disabled={state === 'disabled'}
+      aria-label={`Bookmark: ${title}`}
     >
       <BookmarkHeader
         title={title}
@@ -91,6 +128,6 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
         userInitials={userInitials}
         onNoteClick={isInteractive ? onNoteClick : undefined}
       />
-    </article>
+    </Box>
   );
 };

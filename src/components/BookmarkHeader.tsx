@@ -45,20 +45,20 @@ export const BookmarkHeader: React.FC<BookmarkHeaderProps> = ({
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: '1 0 0', pt: 0.5 }}>
         <Typography
           component="h2"
-          sx={{ color: '#2D2F2F', fontSize: '0.75rem', fontWeight: 400, lineHeight: '15.6px' }}
+          variant="bookmarkTitle"
         >
           {title}
         </Typography>
         <Typography
           component="span"
-          sx={{ color: '#929696', fontSize: '0.75rem', fontWeight: 400, lineHeight: '1rem' }}
+          variant="bookmarkReference"
         >
           {reference}
         </Typography>
       </Box>
       <Typography
         component="time"
-        sx={{ color: '#2D2F2F', fontSize: '0.75rem', fontWeight: 400, lineHeight: '1rem' }}
+        variant="bookmarkTime"
       >
         {timeRange}
       </Typography>

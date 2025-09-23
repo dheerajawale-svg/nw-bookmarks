@@ -1,4 +1,7 @@
 import { createTheme } from "@mui/material/styles";
+import { createPalette } from "./palette";
+import { createTypography } from "./typography";
+import { components } from "./components";
 
 const getCssRadius = () => {
   if (typeof window === "undefined") {
@@ -13,36 +16,12 @@ const getCssRadius = () => {
 
 export const createAppTheme = () =>
   createTheme({
-    palette: {
-      mode: "light",
-      primary: {
-        main: "hsl(var(--primary))",
-        contrastText: "hsl(var(--primary-foreground))",
-      },
-      secondary: {
-        main: "hsl(var(--secondary))",
-        contrastText: "hsl(var(--secondary-foreground))",
-      },
-      error: {
-        main: "hsl(var(--destructive))",
-        contrastText: "hsl(var(--destructive-foreground))",
-      },
-      background: {
-        default: "hsl(var(--background))",
-        paper: "hsl(var(--card))",
-      },
-      text: {
-        primary: "hsl(var(--foreground))",
-        secondary: "hsl(var(--muted-foreground))",
-      },
-      divider: "hsl(var(--border))",
-    },
+    palette: createPalette(),
     shape: {
       borderRadius: getCssRadius(),
     },
-    typography: {
-      fontFamily: "inherit",
-    },
+    typography: createTypography(),
+    components,
   });
 
 export type AppTheme = ReturnType<typeof createAppTheme>;
