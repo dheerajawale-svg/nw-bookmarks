@@ -56,7 +56,6 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
       borderRadius: '12px',
       border: '1px solid #EAEBEB',
       backgroundColor: '#FFFFFF',
-      transition: 'all 150ms ease-in-out',
       cursor: state === 'disabled' ? 'not-allowed' : 'pointer',
       width: '556px',
       minWidth: '336px',
