@@ -1,5 +1,13 @@
-import { Divider, Menu, MenuItem, type MenuItemProps, type MenuProps } from "@mui/material";
-import { ListSubheader, type ListSubheaderProps } from "@mui/material";
+import {
+  Box,
+  Divider,
+  ListSubheader,
+  type ListSubheaderProps,
+  Menu,
+  MenuItem,
+  type MenuItemProps,
+  type MenuProps,
+} from "@mui/material";
 import {
   createContext,
   forwardRef,
@@ -11,9 +19,61 @@ import {
   useState,
 } from "react";
 import type { ComponentProps, MutableRefObject, PropsWithChildren, ReactNode } from "react";
-import { cn } from "@/lib/utils";
 import { Button, type ButtonProps } from "./button";
 import { type SxProps, type Theme } from "@mui/material/styles";
+import type { SystemStyleObject } from "@mui/system";
+
+const toSxArray = (sx?: SxProps<Theme>): SystemStyleObject<Theme>[] => {
+  if (!sx) return [];
+  if (Array.isArray(sx)) {
+    return sx.filter((item): item is SystemStyleObject<Theme> => 
+      item !== null && item !== undefined && typeof item !== 'boolean'
+    ).map(item => typeof item === 'function' ? {} : item);
+  }
+  if (typeof sx === 'function') return [];
+  return [sx as SystemStyleObject<Theme>];
+};
+
+const mergeSlotSx = (
+  base: SystemStyleObject<Theme>,
+  sx?: SxProps<Theme>,
+): SystemStyleObject<Theme> | ((theme: Theme) => SystemStyleObject<Theme>) => {
+  if (!sx) {
+    return base;
+  }
+
+  return (theme: Theme) => {
+    const result: SystemStyleObject<Theme> = { ...base };
+
+    const append = (value?: SxProps<Theme>) => {
+      if (value === null || value === undefined) {
+        return;
+      }
+
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          if (item !== null && item !== undefined && typeof item !== 'boolean') {
+            append(item);
+          }
+        });
+        return;
+      }
+
+      if (typeof value === "function") {
+        const resolved = value(theme);
+        if (resolved) {
+          append(resolved);
+        }
+        return;
+      }
+
+      Object.assign(result, value as SystemStyleObject<Theme>);
+    };
+
+    append(sx);
+    return result;
+  };
+};
 
 interface SelectContextValue {
   value?: string;
@@ -225,7 +285,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
         ref={mergeRefs(ref, ctx.triggerRef)}
         onClick={handleClick}
         disabled={ctx.disabled ?? disabledProp}
-        sx={[baseTriggerStyles, ...(Array.isArray(sx) ? sx : [sx])].filter(Boolean)}
+        sx={sx ? [baseTriggerStyles, ...toSxArray(sx)] : baseTriggerStyles}
       >
         <span style={{ flex: 1, textAlign: "left", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {children ?? <SelectValue />}
@@ -262,9 +322,16 @@ export const SelectValue = ({ placeholder: placeholderProp, className }: SelectV
   const value = ctx.selectedLabel ?? fallback;
 
   return (
-    <span className={cn(!ctx.selectedLabel && "text-muted-foreground", className)}>
+    <Box
+      component="span"
+      className={className}
+      sx={{
+        color: ctx.selectedLabel ? undefined : "hsl(var(--muted-foreground))",
+        display: "inline",
+      }}
+    >
       {value ?? null}
-    </span>
+    </Box>
   );
 };
 
@@ -281,10 +348,27 @@ export const SelectContent = ({
   ...props
 }: SelectContentProps) => {
   const ctx = useSelectContext();
+  const minWidth = ctx.triggerWidth ?? 180;
 
   const handleClose: NonNullable<MenuProps["onClose"]> = (event, reason) => {
     onClose?.(event, reason);
     ctx.setOpen(false);
+  };
+
+  const defaultPaperSx: SystemStyleObject<Theme> = {
+    marginTop: "8px",
+    maxHeight: "16rem",
+    minWidth: `${minWidth}px`,
+    overflowY: "auto",
+    borderRadius: "var(--radius)",
+    border: "1px solid hsl(var(--border))",
+    backgroundColor: "hsl(var(--popover))",
+    color: "hsl(var(--popover-foreground))",
+    boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1)",
+  };
+
+  const defaultMenuListSx: SystemStyleObject<Theme> = {
+    padding: "4px",
   };
 
   return (
@@ -296,23 +380,16 @@ export const SelectContent = ({
       disableScrollLock
       anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       transformOrigin={{ vertical: "top", horizontal: "left" }}
+      className={className}
       PaperProps={{
         elevation: 0,
         ...PaperProps,
-        className: cn(
-          "mt-2 max-h-64 min-w-[180px] overflow-y-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md",
-          PaperProps?.className,
-        ),
-        sx: {
-          minWidth: ctx.triggerWidth,
-          borderRadius: "var(--radius)",
-          ...PaperProps?.sx,
-        },
+        sx: mergeSlotSx(defaultPaperSx, PaperProps?.sx),
       }}
       MenuListProps={{
         dense: true,
         ...MenuListProps,
-        className: cn("p-1", MenuListProps?.className),
+        sx: mergeSlotSx(defaultMenuListSx, MenuListProps?.sx),
       }}
     >
       {children}
@@ -327,9 +404,10 @@ export interface SelectItemProps extends MenuItemProps {
 }
 
 export const SelectItem = forwardRef<HTMLLIElement, SelectItemProps>(
-  ({ value, className, children, onClick, ...props }, ref) => {
+  ({ value, className, children, onClick, sx, ...props }, ref) => {
     const ctx = useSelectContext();
     const selected = ctx.value === value;
+    const isDisabled = props.disabled ?? false;
 
     useEffect(() => {
       ctx.registerItem(value, children);
@@ -347,12 +425,67 @@ export const SelectItem = forwardRef<HTMLLIElement, SelectItemProps>(
         ref={ref}
         selected={selected}
         onClick={handleClick}
-        className={cn(
-          "flex cursor-pointer items-center gap-2 rounded-sm px-2.5 py-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground",
-          selected ? "bg-accent text-accent-foreground" : "hover:bg-accent hover:text-accent-foreground",
-          props.disabled && "pointer-events-none opacity-50",
-          className,
-        )}
+        className={className}
+        sx={sx ? [
+          {
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            borderRadius: "0.125rem",
+            padding: "8px 10px",
+            fontSize: "0.875rem",
+            lineHeight: "1.25rem",
+            transition: "color 150ms ease-in-out, background-color 150ms ease-in-out",
+            cursor: isDisabled ? "default" : "pointer",
+            outline: "none",
+            "&:hover": {
+              backgroundColor: "hsl(var(--accent))",
+              color: "hsl(var(--accent-foreground))",
+            },
+            "&.Mui-selected, &.Mui-selected:hover": {
+              backgroundColor: "hsl(var(--accent))",
+              color: "hsl(var(--accent-foreground))",
+            },
+            "&.Mui-focusVisible": {
+              backgroundColor: "hsl(var(--accent))",
+              color: "hsl(var(--accent-foreground))",
+            },
+            "&.Mui-disabled": {
+              pointerEvents: "none",
+              opacity: 0.5,
+              cursor: "default",
+            },
+          },
+          ...toSxArray(sx),
+        ] : {
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          borderRadius: "0.125rem",
+          padding: "8px 10px",
+          fontSize: "0.875rem",
+          lineHeight: "1.25rem",
+          transition: "color 150ms ease-in-out, background-color 150ms ease-in-out",
+          cursor: isDisabled ? "default" : "pointer",
+          outline: "none",
+          "&:hover": {
+            backgroundColor: "hsl(var(--accent))",
+            color: "hsl(var(--accent-foreground))",
+          },
+          "&.Mui-selected, &.Mui-selected:hover": {
+            backgroundColor: "hsl(var(--accent))",
+            color: "hsl(var(--accent-foreground))",
+          },
+          "&.Mui-focusVisible": {
+            backgroundColor: "hsl(var(--accent))",
+            color: "hsl(var(--accent-foreground))",
+          },
+          "&.Mui-disabled": {
+            pointerEvents: "none",
+            opacity: 0.5,
+            cursor: "default",
+          },
+        }}
       >
         {children}
       </MenuItem>
@@ -365,11 +498,25 @@ SelectItem.displayName = "SelectItem";
 export type SelectLabelProps = ListSubheaderProps;
 
 export const SelectLabel = forwardRef<HTMLLIElement, SelectLabelProps>(
-  ({ className, ...props }, ref) => (
+  ({ className, sx, ...props }, ref) => (
     <ListSubheader
       {...props}
       ref={ref}
-      className={cn("px-2.5 py-1.5 text-xs font-semibold text-muted-foreground", className)}
+      className={className}
+      sx={sx ? [
+        {
+          padding: "6px 10px",
+          fontSize: "0.75rem",
+          fontWeight: 600,
+          color: "hsl(var(--muted-foreground))",
+        },
+        ...toSxArray(sx),
+      ] : {
+        padding: "6px 10px",
+        fontSize: "0.75rem",
+        fontWeight: 600,
+        color: "hsl(var(--muted-foreground))",
+      }}
     />
   ),
 );
@@ -378,16 +525,26 @@ SelectLabel.displayName = "SelectLabel";
 
 export interface SelectGroupProps extends PropsWithChildren {
   className?: string;
+  sx?: SxProps<Theme>;
 }
 
-export const SelectGroup = ({ className, children }: SelectGroupProps) => (
-  <div className={cn("py-1", className)}>{children}</div>
+export const SelectGroup = ({ className, children, sx }: SelectGroupProps) => (
+  <Box
+    className={className}
+    sx={sx ? [{ paddingTop: "4px", paddingBottom: "4px" }, ...toSxArray(sx)] : { paddingTop: "4px", paddingBottom: "4px" }}
+  >
+    {children}
+  </Box>
 );
 
 SelectGroup.displayName = "SelectGroup";
 
-export const SelectSeparator = ({ className, ...props }: ComponentProps<typeof Divider>) => (
-  <Divider {...props} className={cn("my-1", className)} />
+export const SelectSeparator = ({ className, sx, ...props }: ComponentProps<typeof Divider>) => (
+  <Divider
+    {...props}
+    className={className}
+    sx={sx ? [{ marginTop: "4px", marginBottom: "4px" }, ...toSxArray(sx)] : { marginTop: "4px", marginBottom: "4px" }}
+  />
 );
 
 SelectSeparator.displayName = "SelectSeparator";

@@ -111,6 +111,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
       tabIndex={state === 'disabled' ? -1 : 0}
       aria-disabled={state === 'disabled'}
       aria-label={`Bookmark: ${title}`}
+      className={className}
     >
       <BookmarkHeader
         title={title}
