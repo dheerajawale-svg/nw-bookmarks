@@ -19,7 +19,7 @@ import {
   useState,
 } from "react";
 import type { ComponentProps, MutableRefObject, PropsWithChildren, ReactNode } from "react";
-import { Button, type ButtonProps } from "./button";
+import { Button, type ButtonProps } from "@mui/material";
 import { type SxProps, type Theme } from "@mui/material/styles";
 import type { SystemStyleObject } from "@mui/system";
 

@@ -35,19 +35,19 @@ export const createTypography = () => ({
     fontSize: "12px",
     fontWeight: 400,
     lineHeight: "16px",
-    color: "hsl(180, 2%, 18%)",
+    color: "rgba(45, 47, 47, 1)",
   },
   bookmarkReference: {
     fontSize: "12px",
     fontWeight: 400,
     lineHeight: "16px",
-    color: "hsl(180, 1%, 58%)",
+    color: "rgba(95, 99, 99, 1)",
   },
   bookmarkTime: {
     fontSize: "12px",
     fontWeight: 400,
     lineHeight: "16px",
-    color: "hsl(180, 2%, 18%)",
+    color: "rgba(45, 47, 47, 1)",
   },
   bookmarkContent: {
     fontSize: "11px",

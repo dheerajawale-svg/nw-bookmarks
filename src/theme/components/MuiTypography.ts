@@ -5,37 +5,36 @@ export const MuiTypography: Components<Theme>["MuiTypography"] = {
     {
       props: { variant: "bookmarkTitle" as any },
       style: {
-        fontSize: "0.75rem",
+        fontSize: "12px",
         fontWeight: 400,
-        lineHeight: "15.6px",
-        color: "#2D2F2F",
+        lineHeight: "16px",
+        color: "rgba(45, 47, 47, 1)",
       },
     },
     {
       props: { variant: "bookmarkReference" as any },
       style: {
-        fontSize: "0.75rem",
+        fontSize: "12px",
         fontWeight: 400,
-        lineHeight: "1rem",
-        color: "#929696",
+        lineHeight: "16px",
+        color: "rgba(95, 99, 99, 1)",
       },
     },
     {
       props: { variant: "bookmarkTime" as any },
       style: {
-        fontSize: "0.75rem",
+        fontSize: "12px",
         fontWeight: 400,
-        lineHeight: "1rem",
-        color: "#2D2F2F",
+        lineHeight: "16px",
+        color: "rgba(45, 47, 47, 1)",
       },
     },
     {
       props: { variant: "bookmarkContent" as any },
       style: {
-        fontSize: "0.875rem",
+        fontSize: "11px",
         fontWeight: 400,
-        lineHeight: 1.4,
-        color: "hsl(var(--foreground))",
+        lineHeight: "18px",
       },
     },
   ],
