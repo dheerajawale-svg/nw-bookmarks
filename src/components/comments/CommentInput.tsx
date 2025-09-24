@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Paper, TextField, Box, IconButton as MuiIconButton } from '@mui/material';
-import { AtSign, Send } from 'lucide-react';
+import { AtSignIcon, SendIcon } from '../Icons';
 import { Avatar } from './CommentAvatar';
 import { MentionDropdown } from './MentionDropdown';
 
@@ -191,7 +191,7 @@ export const CommentInput: React.FC<CommentInputProps> = ({
           aria-label="Mention someone"
           sx={getIconButtonSx()}
         >
-          <AtSign size={16} color="#6b7280" />
+          <AtSignIcon size={16} color="#6b7280" />
         </MuiIconButton>
         
         <MuiIconButton
@@ -199,7 +199,7 @@ export const CommentInput: React.FC<CommentInputProps> = ({
           aria-label="Submit comment"
           sx={getIconButtonSx('primary')}
         >
-          <Send size={16} color="white" />
+          <SendIcon size={16} color="white" />
         </MuiIconButton>
       </Box>
     </Paper>
