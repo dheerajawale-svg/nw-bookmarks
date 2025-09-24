@@ -20,6 +20,8 @@ interface Comment {
 
 interface CommentSectionProps {
   className?: string;
+  showMentionDropdown?: boolean;
+  onMentionDropdownChange?: (show: boolean) => void;
 }
 
 const currentUser: User = {
@@ -29,7 +31,11 @@ const currentUser: User = {
   initials: "CU",
 };
 
-export const CommentSection: React.FC<CommentSectionProps> = ({ className = "" }) => {
+export const CommentSection: React.FC<CommentSectionProps> = ({ 
+  className = "",
+  showMentionDropdown = false,
+  onMentionDropdownChange
+}) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   const handleSubmitComment = (text: string, mentions: User[]) => {
@@ -89,7 +95,12 @@ export const CommentSection: React.FC<CommentSectionProps> = ({ className = "" }
         )}
       </Box>
 
-      <CommentInput currentUser={currentUser} onSubmit={handleSubmitComment} />
+      <CommentInput 
+        currentUser={currentUser} 
+        onSubmit={handleSubmitComment}
+        showMentionDropdown={showMentionDropdown}
+        onMentionDropdownChange={onMentionDropdownChange}
+      />
     </Box>
   );
 };

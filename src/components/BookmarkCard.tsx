@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import { BookmarkHeader } from './BookmarkHeader';
 import { BookmarkContent } from './BookmarkContent';
@@ -41,6 +41,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
   onClick
 }) => {
   const [cardContent, setCardContent] = useState(content);
+  const cardRef = useRef<HTMLElement>(null);
 
   const handleContentChange = (newContent: string) => {
     setCardContent(newContent);
@@ -103,6 +104,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
 
   return (
     <Box
+      ref={cardRef}
       component="article"
       sx={getCardStyles()}
       onClick={handleCardClick}
@@ -122,6 +124,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
         content={cardContent}
         isEditable={isEditable && isInteractive}
         onContentChange={handleContentChange}
+        cardRef={cardRef}
       />
       <BookmarkFooter
         filters={filters}

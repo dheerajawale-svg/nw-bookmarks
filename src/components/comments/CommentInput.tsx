@@ -81,6 +81,8 @@ interface CommentInputProps {
   currentUser: User;
   onSubmit: (comment: string, mentions: User[]) => void;
   className?: string;
+  showMentionDropdown?: boolean;
+  onMentionDropdownChange?: (show: boolean) => void;
 }
 
 const mockUsers: User[] = [
@@ -94,10 +96,11 @@ const mockUsers: User[] = [
 export const CommentInput: React.FC<CommentInputProps> = ({ 
   currentUser, 
   onSubmit, 
-  className = '' 
+  className = '',
+  showMentionDropdown = false,
+  onMentionDropdownChange
 }) => {
   const [comment, setComment] = useState('');
-  const [showMentionDropdown, setShowMentionDropdown] = useState(false);
   const [mentions, setMentions] = useState<User[]>([]);
   const [cursorPosition, setCursorPosition] = useState(0);
   const textFieldRef = useRef<HTMLDivElement>(null);
@@ -126,7 +129,7 @@ export const CommentInput: React.FC<CommentInputProps> = ({
       setMentions(prev => [...prev, user]);
     }
     
-    setShowMentionDropdown(false);
+    onMentionDropdownChange?.(false);
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -140,11 +143,11 @@ export const CommentInput: React.FC<CommentInputProps> = ({
     const shouldShow = textBeforeCursor.endsWith('@') || 
                       (textBeforeCursor.includes('@') && !textBeforeCursor.substring(textBeforeCursor.lastIndexOf('@')).includes(' '));
     
-    setShowMentionDropdown(shouldShow);
+    onMentionDropdownChange?.(shouldShow);
   };
 
   const handleMentionClick = () => {
-    setShowMentionDropdown(!showMentionDropdown);
+    onMentionDropdownChange?.(!showMentionDropdown);
   };
 
   return (

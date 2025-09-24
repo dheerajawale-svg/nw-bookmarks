@@ -35,6 +35,7 @@ export const MentionDropdown: React.FC<MentionDropdownProps> = ({
       sx={{ zIndex: 1300 }}
     >
       <Paper
+        data-mention-dropdown
         elevation={3}
         sx={{
           maxHeight: '200px',

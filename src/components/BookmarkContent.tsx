@@ -11,16 +11,19 @@ interface BookmarkContentProps {
   content: string;
   isEditable?: boolean;
   onContentChange?: (content: string) => void;
+  cardRef?: React.RefObject<HTMLElement>;
 }
 
 export const BookmarkContent: React.FC<BookmarkContentProps> = ({
   content,
   isEditable = false,
-  onContentChange
+  onContentChange,
+  cardRef
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState(content);
   const [isHovered, setIsHovered] = useState(false);
+  const [showMentionDropdown, setShowMentionDropdown] = useState(false);
   const editableAreaRef = useRef<HTMLDivElement | null>(null);
 
   const handleEdit = () => {
@@ -53,9 +56,27 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      
+      // Don't close if mention dropdown is open and click is within the dropdown
+      if (showMentionDropdown) {
+        const mentionDropdown = document.querySelector('[data-mention-dropdown]');
+        if (mentionDropdown && mentionDropdown.contains(target)) {
+          return;
+        }
+      }
+      
+      // Close if click is outside the entire bookmark card
+      if (cardRef?.current && !cardRef.current.contains(target)) {
+        handleCancel();
+        return;
+      }
+      
+      // Close if click is outside the editable area (but within the card) and dropdown is not open
       if (
         editableAreaRef.current &&
-        !editableAreaRef.current.contains(event.target as Node)
+        !editableAreaRef.current.contains(target) &&
+        !showMentionDropdown
       ) {
         handleCancel();
       }
@@ -68,7 +89,7 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
-  }, [isEditing, handleCancel]);
+  }, [isEditing, handleCancel, showMentionDropdown, cardRef]);
 
   return (
     <Box
@@ -87,7 +108,10 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
     >
       {isEditing ? (
         <Box ref={editableAreaRef} sx={{ width: '100%' }}>
-          <CommentSection />
+        <CommentSection 
+          showMentionDropdown={showMentionDropdown}
+          onMentionDropdownChange={setShowMentionDropdown}
+        />
         </Box>
       ) : (
         <Typography
