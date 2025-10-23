@@ -10,6 +10,7 @@ interface Filter {
 }
 
 interface BookmarkCardProps {
+  id: string | number;
   title: string;
   reference: string;
   timeRange: string;
@@ -26,6 +27,7 @@ interface BookmarkCardProps {
 }
 
 export const BookmarkCard: React.FC<BookmarkCardProps> = ({
+  id,
   title,
   reference,
   timeRange,
@@ -121,6 +123,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
         onMenuClick={isInteractive ? onMenuClick : undefined}
       />
       <BookmarkContent
+        bookmarkId={id}
         content={cardContent}
         isEditable={isEditable && isInteractive}
         onContentChange={handleContentChange}

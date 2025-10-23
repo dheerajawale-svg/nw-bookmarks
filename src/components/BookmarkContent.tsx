@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import { CommentSection } from './comments/CommentSection';
 
 interface BookmarkContentProps {
+  bookmarkId: string | number;
   content: string;
   isEditable?: boolean;
   onContentChange?: (content: string) => void;
@@ -15,6 +16,7 @@ interface BookmarkContentProps {
 }
 
 export const BookmarkContent: React.FC<BookmarkContentProps> = ({
+  bookmarkId,
   content,
   isEditable = false,
   onContentChange,
@@ -108,10 +110,46 @@ export const BookmarkContent: React.FC<BookmarkContentProps> = ({
     >
       {isEditing ? (
         <Box ref={editableAreaRef} sx={{ width: '100%' }}>
-        <CommentSection 
-          showMentionDropdown={showMentionDropdown}
-          onMentionDropdownChange={setShowMentionDropdown}
-        />
+          {/* Display description at the top */}
+          <Box sx={{ 
+            marginBottom: '16px',
+            padding: '12px',
+            backgroundColor: '#f9fafb',
+            borderRadius: '8px',
+            borderLeft: '3px solid #008C9A'
+          }}>
+            <Typography
+              variant="caption"
+              sx={{
+                color: '#6b7280',
+                fontSize: '10px',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                marginBottom: '4px',
+                display: 'block'
+              }}
+            >
+              Description
+            </Typography>
+            <Typography
+              sx={{
+                color: '#374151',
+                fontSize: '0.75rem',
+                lineHeight: '1rem',
+                fontWeight: 400,
+              }}
+            >
+              {content}
+            </Typography>
+          </Box>
+          
+          {/* Comment section below */}
+          <CommentSection 
+            bookmarkId={bookmarkId}
+            showMentionDropdown={showMentionDropdown}
+            onMentionDropdownChange={setShowMentionDropdown}
+          />
         </Box>
       ) : (
         <Typography

@@ -214,6 +214,7 @@ const Index = () => {
                 {bookmarks.map((bookmark) => (
                   <BookmarkCard
                     key={bookmark.id}
+                    id={bookmark.id}
                     title={bookmark.title}
                     reference={bookmark.reference}
                     timeRange={bookmark.timeRange}

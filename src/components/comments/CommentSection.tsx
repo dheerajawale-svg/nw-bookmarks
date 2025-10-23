@@ -1,24 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import { CommentInput } from "./CommentInput";
 import { Avatar } from "./CommentAvatar";
-
-interface User {
-  id: string;
-  name: string;
-  username: string;
-  initials: string;
-}
-
-interface Comment {
-  id: string;
-  text: string;
-  author: User;
-  mentions: User[];
-  timestamp: Date;
-}
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { addComment, selectCommentsByBookmarkId } from "@/store/slices/commentsSlice";
+import { User } from "@/types/comments";
 
 interface CommentSectionProps {
+  bookmarkId: string | number;
   className?: string;
   showMentionDropdown?: boolean;
   onMentionDropdownChange?: (show: boolean) => void;
@@ -32,21 +21,27 @@ const currentUser: User = {
 };
 
 export const CommentSection: React.FC<CommentSectionProps> = ({ 
+  bookmarkId,
   className = "",
   showMentionDropdown = false,
   onMentionDropdownChange
 }) => {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const dispatch = useAppDispatch();
+  const comments = useAppSelector((state) => 
+    selectCommentsByBookmarkId(state, bookmarkId)
+  );
 
   const handleSubmitComment = (text: string, mentions: User[]) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      text,
-      author: currentUser,
-      mentions,
-      timestamp: new Date(),
-    };
-    setComments((prev) => [...prev, newComment]);
+    dispatch(addComment({
+      bookmarkId,
+      comment: {
+        id: Date.now().toString(),
+        text,
+        author: currentUser,
+        mentions,
+        timestamp: new Date().toISOString(),
+      }
+    }));
   };
 
   return (
@@ -80,7 +75,7 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
                         @{comment.author.username}
                       </Typography>
                       <Typography variant="body2" sx={{ color: "#9ca3af", fontSize: "12px" }}>
-                        {comment.timestamp.toLocaleTimeString()}
+                        {new Date(comment.timestamp).toLocaleTimeString()}
                       </Typography>
                     </Box>
                     <Typography variant="body1" sx={{ color: "#374151", lineHeight: 1.5 }}>
